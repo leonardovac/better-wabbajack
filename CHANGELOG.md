@@ -1,5 +1,8 @@
 ### Changelog
 
+#### Version - 3.4.0.0-BETTER - 3 Dec 2023
+* Added automated download for Nexusmods non-premium users
+
 #### Version - 3.4.0.0 - 11/19/2023
 * Fixed `--outputPath` not being used for the CLI `compile` (thanks to @majcosta for fixing that)
 * Improved Log message for cases where low storage on the drive Wabbajack is installed on causes compiles to fail
