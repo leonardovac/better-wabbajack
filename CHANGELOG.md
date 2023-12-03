@@ -1,6 +1,6 @@
 ### Changelog
 
-#### Version - 3.4.0.0-BETTER - 3 Dec 2023
+#### Version - 3.4.0.0 - 3 Dec 2023
 * Added automated download for Nexusmods non-premium users
 
 #### Version - 3.4.0.0 - 11/19/2023
