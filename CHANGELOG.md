@@ -1,5 +1,91 @@
 ### Changelog
 
+#### Version - 3.7.5.3 - 1/29/2025
+* Compilation failures are now logged as an ERR type instead of INFO. Thanks to Thamous ([@AlexDickerson](https://github.com/AlexDickerson))
+* Fix for the Wabbajack CDN not downloading parts correctly anymore after it switched to chunked HTTP responses. Suspected change by Cloudflare.
+
+#### Version - 3.7.5.2 - 1/12/2025 
+* Fix for Wabbajack not fully utilizing saturating network speed because a download library added for resumable downloads was poorly optimized. Thanks to Thamous ([@AlexDickerson](https://github.com/AlexDickerson)).
+* Fix for situations where Wabbajack might send an excessive amount of OAuth requests resulting in hitting Nexus rate limits, causing a temporary ban. Thanks to Thamous ([@AlexDickerson](https://github.com/AlexDickerson)).
+* Fix for the Wabbajack gallery going down after a new repository is added because the gallery was accidentally dependent on the tests running the validation report.
+* Fix 7 Days to Die support not working properly. Thanks to [@JanuarySnow][https://github.com/JanuarySnow).
+
+
+#### Version - 3.7.5.1 - 11/23/2024
+* Reverted "Wabbajack will now put modfile Titles, Description and Version into the `.meta` file." as it didn't account for formatting in descriptions that could confuse the iniparser
+* Fix a coding error in the login check for compiling that prevents compiles from starting
+* Fix for some mediafire sources not being ignored during validation.
+
+#### Version - 3.7.5.0 - 11/23/2024
+* Fix for Wabbajack trying to work with an expired OAuth token.
+* Added pre-compile login check.
+* Disabled automated validation for Mediafire due to too many falsely flagged down mods.
+  * There are plans to create some manually maintained `source_down` index to replace this in the future.
+* Added the groundwork to for supporting "7 Days to Die" (This stage won't support all WJ features yet.)
+
+#### Version - 3.7.4.1 - 11/21/2024
+* Add support for the upcoming Nexus game ID change (thanks to [@JonathanFeenstra](https://github.com/JonathanFeenstra))
+* Wabbajack will now put modfile Titles, Description and Version into the `.meta` file.
+* Fix for CLI not working on certain commands due to required assemblies being removed on publish
+* Improved Wabbajack CLI inline-report: now automatically tries to open the report in the browser on running the command
+* Removed Vector Plexus Login from the UI cause with the only file being used from the having an official off-site mirror it isn't needed.
+* Figured out why codesigning was borked with the latest certs. Fixed it.
+* Updated to .NET 9
+
+#### Version - 3.7.4.0 - 10/15/2024
+* Fix for gallery not properly showing lists that are in maintenance.
+* Fix logging typo (thanks to [@code-syl](https://github.com/code-syl))
+
+#### Version - 3.7.3.0 - 9/19/2024
+* Downloads now start in a random order, to reduce the amount of lag in the UI when initially starting
+* Wabbajack may now redirect some downloads to mirrors hosted on Nexus Mods (by request of the mod authors)
+
+
+#### Version - 3.7.2.1 - 9/1/2024
+* Fixed a bug with the html reports when in a folder with a space in the name
+
+#### Version - 3.7.2.0 - 8/25/2024
+* Added a new button to the installer configuration window for verifying installs. This runs the same code as the verify CLI command, now it's in the UI for easier access. The output of this command
+is written to a `.html` file and opened in the default browser.
+* When a modlist install fails due to one or more missing non-nexus files, the installer will now write a `.html` file with all the links and instructions, and open it with the default browser. This data was
+previsoously only written to the log file.
+
+#### Version - 3.7.1.1 - 8/13/2024
+* HOTFIX: buggy release pipeline caused some corruption in the files of 3.7.1.0
+
+#### Version - 3.7.1.0 - 8/13/2024
+* Fixed file paths with special characters corrupting when packed into BSAs
+  * This issue only affected Fallout 3, Fallout NV and Skyrim LE
+* Added logging to determine which downloaded files cannot be hashed
+  * This could occur in the downloading phase when installing a modlist when there are broken/corrupted files in the downloads folder
+* Fixed Wabbajack crashing when double-clicking the browser window titlebar or URL
+* Fixed Wabbajack always using explorer.exe instead of the default file browser
+
+#### Version - 3.7.0.0 - 6/21/2024
+* Added Starfield support
+    * Note: Hashes were added earlier, but the earlier version was not fully compatible due to Wabbajack extracting the BA2 archives incorrectly. This has been fixed.
+* Updated GameFinder dependency
+* Updated WebView dependency
+* Updated other dependencies
+
+#### Version - 3.6.1.1 - 5/30/2024
+* Fixed `set-nexus-api-key` CLI command
+* Fixed other issues related to OAuth
+
+#### Version - 3.6.1.0 - 5/26/2024
+* Fixed a race condition on renewing Nexus Mods OAuth2 tokens
+* Added `set-nexus-api-key` CLI command
+* Added Starfield meta data
+* Added Fallout New Vegas Epic Games metadata
+
+#### Version - 3.6.0.0 - 5/25/2024
+* Wabbajack now uses OAuth2 for Nexus Mods logins
+* Support for DirectURL use with LL files
+
+#### Version - 3.5.0.2 - 5/21/2024
+* *HOTFIX* - change how we log into Nexus Mods. We still need to rewrite this on
+  Oauth2, but this should fix the current issues we have, and get people back up and running
+
 #### Version - 3.5.0.1 - 1/15/2024
 * *HOTFIX* - change the cache file names so files will be auto-rehashed
 

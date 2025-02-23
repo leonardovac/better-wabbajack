@@ -27,7 +27,8 @@ namespace Wabbajack
 
         private ObservableCollection<ViewModel> TabVMs = new ObservableCollectionExtended<ViewModel>();
 
-        public MainWindow(ILogger<MainWindow> logger, SystemParametersConstructor systemParams, LauncherUpdater updater, MainWindowVM vm)
+        public MainWindow(ILogger<MainWindow> logger, SystemParametersConstructor systemParams, LauncherUpdater updater
+            , MainWindowVM vm)
         {
             InitializeComponent();
             _mwvm = vm;
@@ -122,7 +123,7 @@ namespace Wabbajack
                     .ObserveOn(RxApp.MainThreadScheduler)
                     .Select(v => v == InstallState.Installing ? Visibility.Collapsed : Visibility.Visible)
                     .BindTo(this, view => view.SettingsButton.Visibility);
-
+                
             }
             catch (Exception ex)
             {
@@ -144,7 +145,10 @@ namespace Wabbajack
 
         private void UIElement_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
-            this.DragMove();
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                this.DragMove();
+            }
         }
 
     }

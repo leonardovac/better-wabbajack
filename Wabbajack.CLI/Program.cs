@@ -32,7 +32,7 @@ internal class Program
             {
                 services.AddSingleton(new JsonSerializerOptions());
                 services.AddSingleton<HttpClient, HttpClient>();
-                services.AddSingleton<IHttpDownloader, SingleThreadedDownloader>();
+                services.AddResumableHttpDownloader();
                 services.AddSingleton<IConsole, SystemConsole>();
                 services.AddSingleton<CommandLineBuilder, CommandLineBuilder>();
                 services.AddSingleton<TemporaryFileManager>();
@@ -41,6 +41,7 @@ internal class Program
                 services.AddSingleton<Client>();
                 services.AddSingleton<Networking.WabbajackClientApi.Client>();
                 services.AddSingleton(s => new GitHubClient(new ProductHeaderValue("wabbajack")));
+                services.AddSingleton<TemporaryFileManager>();
 
                 services.AddOSIntegrated();
                 services.AddServerLib();

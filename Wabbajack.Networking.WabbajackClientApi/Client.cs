@@ -50,6 +50,7 @@ public class Client
     private readonly ITokenProvider<WabbajackApiState> _token;
     private bool _inited;
 
+    public bool IgnoreMirrorList { get; set; } = false;
 
     public Client(ILogger<Client> logger, HttpClient client, ITokenProvider<WabbajackApiState> token,
         DTOSerializer dtos,
@@ -106,6 +107,15 @@ public class Client
         return d.Deserialize<ServerAllowList>(str);
     }
 
+    public async Task<Archive[]> LoadMirrors()
+    {
+        if (IgnoreMirrorList)
+            return Array.Empty<Archive>();
+
+        var str = await _client.GetStringAsync(_configuration.MirrorList);
+        return JsonSerializer.Deserialize<Archive[]>(str, _dtos.Options) ?? [];
+    }
+
     public async Task<ServerAllowList> LoadMirrorAllowList()
     {
         var str = await _client.GetStringAsync(_configuration.MirrorAllowList);
@@ -124,6 +134,7 @@ public class Client
     public async Task<Archive[]> GetGameArchives(Game game, string version)
     {
         var url = $"https://raw.githubusercontent.com/wabbajack-tools/indexed-game-files/master/{game}/{version}.json";
+        _logger.LogInformation($"The URL for retrieving game file hashes is : {url}");
         return await _client.GetFromJsonAsync<Archive[]>(url, _dtos.Options) ?? Array.Empty<Archive>();
     }
 
@@ -253,6 +264,14 @@ public class Client
         return repositories!;
     }
 
+    public async Task<SearchIndex> LoadSearchIndex()
+    {
+        return await _client.GetFromJsonAsync<SearchIndex>(_limiter,
+            new HttpRequestMessage(HttpMethod.Get, 
+                "https://raw.githubusercontent.com/wabbajack-tools/mod-lists/refs/heads/master/reports/searchIndex.json"),
+                _dtos.Options);
+    }
+    
     public Uri GetPatchUrl(Hash upgradeHash, Hash archiveHash)
     {
         return new Uri($"{_configuration.PatchBaseAddress}{upgradeHash.ToHex()}_{archiveHash.ToHex()}");

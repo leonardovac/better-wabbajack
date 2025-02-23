@@ -48,7 +48,7 @@ public class NexusDownloader : ADownloader<Nexus>, IUrlDownloader
 
     public override Task<bool> Prepare()
     {
-        return Task.FromResult(_api.ApiKey.HaveToken());
+        return Task.FromResult(_api.AuthInfo.HaveToken());
     }
 
     public override bool IsAllowed(ServerAllowList allowList, IDownloadState state)
@@ -103,12 +103,15 @@ public class NexusDownloader : ADownloader<Nexus>, IUrlDownloader
             !string.IsNullOrWhiteSpace(gameName) &&
             !string.IsNullOrWhiteSpace(modId) &&
             !string.IsNullOrWhiteSpace(fileId))
+        {
+            var gameMetaData = GameRegistry.GetByMO2ArchiveName(gameName) ?? GameRegistry.GetByNexusName(gameName);
             return new Nexus
             {
-                Game = GameRegistry.GetByMO2ArchiveName(gameName)!.Game,
+                Game = gameMetaData!.Game,
                 ModID = long.Parse(modId),
                 FileID = long.Parse(fileId)
             };
+        }
 
         return null;
     }
@@ -217,8 +220,9 @@ public class NexusDownloader : ADownloader<Nexus>, IUrlDownloader
             
             return fileInfo.info.FileId == state.FileID;
         }
-        catch (HttpException)
+        catch (HttpException ex)
         {
+            _logger.LogError($"HttpException: {ex} on {archive.Name}");
             return false;
         }
     }

@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-  VERSION: 3.5.0.2
+  VERSION: 3.7.5.1
 
 jobs:
   build:
@@ -23,7 +23,7 @@ jobs:
     
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, windows-latest]
 
     steps:
       - uses: actions/checkout@v2
@@ -32,26 +32,19 @@ jobs:
         if: runner.os != 'Windows'
         run: chmod -R +x Wabbajack.FileExtractor/Extractors
         
-      - name: Setup .NET Core SDK 8.0.x
+      - name: Setup .NET Core SDK 9.0.x
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x'
-          include-prerelease: true
-          
-      - name: Setup .NET Core SDK 7.0.x
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '7.0.x'
-          include-prerelease: true
-          
-      - name: Setup .NET Core SDK 6.0.x
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '9.0.x'
           include-prerelease: true
 
       - name: Test
-        run: dotnet test /p:EnableWindowsTargeting=true --filter "Category!=FlakeyNetwork"
+        if: ${{ github.ref == 'refs/heads/main' }}
+        run: dotnet test /p:EnableWindowsTargeting=true
+
+      - name: Test
+        if: ${{ github.ref != 'refs/heads/main' }}
+        run: dotnet test /p:EnableWindowsTargeting=true --filter "Category!=RequiresOAuth"
         
       #- name: Upload Test Folder on Failure
       #  if: ${{ failure() }}
@@ -111,10 +104,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Setup .NET Core SDK 8.0.x
+      - name: Setup .NET Core SDK 9.0.x
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '9.0.x'
           include-prerelease: true      
 
       - name: Restore
